@@ -26,6 +26,15 @@ nnoremap <F2> :set invpaste paste?<CR>
 set pastetoggle=<F2>
 set showmode
 
+" Execute selection as vim command
+command! -bar -range VimEval execute <line1> . ',' . <line2> . 'y|@"'
+
+" Helpful shortcuts for editing vimrc and managing plugins
+nmap <Leader>E :edit $MYVIMRC<CR>
+nmap <Leader>R :source $MYVIMRC<CR>
+nmap <Leader>I :PlugInstall<CR>
+nmap <Leader>U :PlugUpdate<CR>
+
 filetype plugin indent on
 
 " Plugins {{{
