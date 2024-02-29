@@ -1,0 +1,14 @@
+# ExecutionPolicy is set to Restricted by default; 
+Set-ExecutionPolicy Bypass -Scope Process
+
+# Install chocolatey
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+# Enable Developer Mode
+# https://superuser.com/a/1756929
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /t REG_DWORD /f /v "AllowDevelopmentWithoutDevLicense" /d "1"
+
+winget install Microsoft.WindowsTerminal
+winget install Microsoft.PowerToys
+winget install Microsoft.VisualStudioCode
+choco install sudo

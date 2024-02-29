@@ -1,1 +1,8 @@
+.ssh/
+.netrc
+*.pem
+.*history
+.Xauthority
+
+.DS_Store
 Brewfile.lock.json

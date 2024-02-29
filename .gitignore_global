@@ -1,0 +1,35 @@
+# macOS
+.DS_Store
+._.DS_Store
+
+# Sensitive
+.env
+.ssh
+id_rsa
+
+# Logs
+*.log
+
+# Swap files
+.*.swp
+*~
+
+# IDE project files
+.vscode
+.idea
+*.eml
+*.iml
+
+# Node.js
+node_modules
+
+# Redis
+dump.rdb
+
+# Compiled files
+*.o
+*.gch
+
+# Patch residue files
+*.orig
+*.rej
