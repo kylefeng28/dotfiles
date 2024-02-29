@@ -1,0 +1,77 @@
+[user]
+	# name = ...
+	# email = ...
+[url "https://"]
+	insteadOf = git://
+
+[alias]
+	a = add
+	d = difftool
+	f = fetch
+	l = log --oneline --graph
+	st = status
+	cl = clone
+	cm = commit
+	br = branch
+	co = checkout
+	mg = merge
+	pl = pull
+	ps = push
+	cp = cherry-pick
+	rb = rebase
+	rbi = rebase -i
+	subm = submodule
+	ls = ls-files
+	rmc = rm --cached
+
+	up = branch --set-upstream-to
+	up-main = branch --set-upstream-to main
+
+	# https://stackoverflow.com/a/2363495 and https://stackoverflow.com/a/37083903
+	hide = update-index --assume-unchanged
+	unhide = update-index --no-assume-unchanged
+	unhide-all = update-index --really-refresh
+	hidden = !git ls-files -v | grep "^[[:lower:]]"
+	ignored = !git status -s --ignored | grep \"^!!\"
+
+	mine = !git log --author $(git config user.email)
+	amend = commit --amend
+	diffcheck = diff --check # check for merge conflict markers
+	psu = !git push -u origin $(git branch-name) # set upstream and push
+	psf = push --force-with-lease # checks if someone else has pushed
+
+	dag = log --graph --format='format:%C(yellow)%h%C(reset) %C(blue)\"%an\" <%ae>%C(reset) %C(magenta)%cr%C(reset)%C(auto)%d%C(reset)%n%s' --date-order
+
+	# Helpers
+	exec = "!exec " # exec command in root directory of git repo
+	root = rev-parse --show-toplevel
+	branch-name = rev-parse --abbrev-ref HEAD
+	upstream-name = !git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)
+
+[core]
+	excludesfile = ~/.gitignore_global
+	autocrlf = input
+	editor = nvim
+
+# Git LFS
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[push]
+	default = simple
+
+[pull]
+	rebase = true
+
+[merge]
+	tool = vimdiff
+	conflictstyle = diff3
+
+[mergetool]
+	trustExitCode = true
+
+[difftool]
+	trustExitCode = true
