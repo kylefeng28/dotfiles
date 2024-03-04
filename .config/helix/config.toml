@@ -1,0 +1,103 @@
+# ~/.config/helix/config.toml
+# vim-inspired keymap for helix. helix's select-then-act paradigm is
+# fundamentally different from vim's verb-object paradigm.
+# However, due to muscle memory and widespread use of vim keymaps (IdeaVim, VSCode VIM, etc),
+# I want to use helix with vim operators like y, d, x and movement commands like 0, $, gg, G
+
+# For more ideas, see
+# https://github.com/LGUG2Z/helix-vim
+# https://github.com/certik/dotfiles/blob/master/.config/helix/config.toml
+# https://github.com/helix-editor/helix/issues/4419
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[keys.normal]
+"esc" = ["collapse_selection", "keep_primary_selection"]
+"C-c" = ["collapse_selection", "keep_primary_selection"] # default: toggle-comments
+"C-[" = ["collapse_selection", "keep_primary_selection"]
+
+# Undo/redo
+"u" = "undo"
+"U" = "no_op" # default: redo
+"C-r" = "redo"
+
+q = "record_macro"
+"Q" = "no_op" # default: record_macro
+"@" = "replay_macro"
+
+0 = "goto_line_start"
+"$" = "goto_line_end"
+G = "goto_last_line"
+"%" = "match_brackets" # default: select_all
+V = ["select_mode", "extend_to_line_bounds"]
+C = ["extend_to_line_end", "yank_main_selection_to_clipboard", "delete_selection", "insert_mode"]
+D = ["extend_to_line_end", "yank_main_selection_to_clipboard", "delete_selection"]
+Z = { Z = [":write-quit"] }
+"*" = ["move_char_right", "move_prev_word_start", "move_next_word_end", "search_selection", "search_next"]
+"#" = ["move_char_right", "move_prev_word_start", "move_next_word_end", "search_selection", "search_prev"]
+
+x = ["collapse_selection", "delete_selection"] # default: extend_line_below
+X = "extend_line_below" # keep helix default
+"C-/" = "toggle_comments"
+
+# unmap case change keys (see select mode)
+"~" = "no_op"
+"`" = "no_op"
+"A-`" = "no_op"
+
+[keys.normal.space]
+E = ":config-open"
+R = ":config-reload"
+
+# Besides dd and yy, the other commands will select and not actually delete/yank
+[keys.normal.d]
+d = ["extend_to_line_bounds", "yank", "delete_selection"]
+t = ["extend_till_char", "select_mode"]
+i = ["select_textobject_inner", "select_mode"]
+a = ["select_textobject_around", "select_mode"]
+
+[keys.normal.y]
+y = ["extend_to_line_bounds", "yank", "normal_mode", "collapse_selection"]
+t = ["extend_till_char", "select_mode"]
+i = ["select_textobject_inner", "select_mode"]
+a = ["select_textobject_around", "select_mode"]
+
+[keys.normal.g]
+"~" = "switch_case"
+u = "switch_to_lowercase"
+U = "switch_to_uppercase"
+
+[keys.select]
+"esc" = ["collapse_selection", "keep_primary_selection", "normal_mode"]
+"C-c" = ["collapse_selection", "keep_primary_selection", "normal_mode"]
+"C-[" = ["collapse_selection", "keep_primary_selection", "normal_mode"]
+
+"0" = "goto_line_start"
+"$" = "goto_line_end"
+
+# map vi" -> vmi" and va" -> vma" to be more like vim and save a keystroke
+i = ["select_textobject_inner"]
+a = ["select_textobject_around"]
+
+V = "extend_to_line_bounds"
+d = "delete_selection" # keep default
+x = "delete_selection" # default: extend_line_below
+X = "extend_line_below" # keep helix default
+
+# unmap case change keys (will be bound to g~/gu/gU)
+"~" = ["switch_case", "collapse_selection", "normal_mode"]
+"`" = "no_op"
+"A-`" = "no_op"
+u = ["switch_to_lowercase", "collapse_selection", "normal_mode"]
+U = ["switch_to_uppercase", "collapse_selection", "normal_mode"]
+
+[keys.insert]
+"C-c" = "normal_mode"
+"C-[" = "normal_mode"
+
+# TODO:
+# select: o swap cursor?
+# C-v block functionality?
