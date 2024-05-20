@@ -1,7 +1,19 @@
 -- See: https://github.com/nanotee/nvim-lua-guide
 
-require('packer').startup(function()
-  use 'wbthomason/packer.nvim' -- Packer can manage itself
+-- Install lazy.nvim
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  lazyrepo = 'https://github.com/folke/lazy.nvim.git'
+  vim.fn.system({ 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath })
+end
+vim.opt.rtp:prepend(lazypath)
+
+-- Small shim to help migrate packer.nvim to lazy.nvim
+function setup_plugins()
+  plugins = {}
+  function use(plugin_spec)
+    plugins[#plugins + 1] = plugin_spec
+  end
 
   -- in Tim Pope we trust
   use 'tpope/vim-sensible'     -- better default settings
@@ -58,7 +70,7 @@ require('packer').startup(function()
   ]]
 
   -- fzf
-  use { 'junegunn/fzf', run = ':call fzf#install()' }
+  use { 'junegunn/fzf', build = ':call fzf#install()' }
   use { 'junegunn/fzf.vim' }
 
   vim.cmd [[
@@ -90,14 +102,18 @@ require('packer').startup(function()
   ]]
 
   -- Airline
-  use 'vim-airline/vim-airline'
-  use 'vim-airline/vim-airline-themes'
+  use { 'vim-airline/vim-airline',
+    dependencies = {
+      'vim-airline/vim-airline-themes',
+      'ryanoasis/vim-devicons'
+    }
+  }
 
   -- Colors
   use 'flazz/vim-colorschemes'
   use 'dylanaraps/wal.vim' -- Pywal integration
 
-  use { 'catppuccin/vim', as = 'catppuccin' }
+  use { 'catppuccin/vim', name = 'catppuccin' }
 
   use 'christoomey/vim-tmux-navigator' -- tmux integration
 
@@ -124,13 +140,14 @@ require('packer').startup(function()
 
   -- Indent level lines
   use { 'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
     config = function()
-      local options = {
-        space_char_blankline = ' ',
-        show_current_context = true,
-        show_current_context_start = true
-      }
-      require('indent_blankline').setup(options)
+      require('ibl').setup({
+        scope = {
+          enabled = true,
+          show_end = true
+        }
+      })
     end
   }
 
@@ -160,5 +177,8 @@ require('packer').startup(function()
   use 'sheerun/vim-polyglot'
   vim.opt.shortmess:remove('A') -- workaround for https://github.com/sheerun/vim-polyglot/issues/765
 
-end)
+  return plugins
+end
+
+require('lazy').setup(setup_plugins())
 

@@ -11,21 +11,15 @@ lua << EOF
 require('plugins') -- See ~/.vim/lua/plugins.lua
 EOF
 
-augroup packer_user_config
-  autocmd!
-  autocmd BufWritePost plugins.lua source <afile> | PackerCompile
-augroup END
-
 nmap <Leader>P :edit ~/.vim/lua/plugins.lua<CR>
-nmap <Leader>I :PackerInstall<CR>
-nmap <Leader>U :PackerUpdate<CR>
+nmap <Leader>I :Lazy<CR>
 
 " Execute selection as vim command
 command! -bar -range VimEval execute <line1> . ',' . <line2> . 'y|@"'
 
 " Colors {{{
 colorscheme catppuccin_frappe
-let g:airline_theme='catpuccin'
+let g:airline_theme='catppuccin_frappe'
 " }}}
 
 " Filetypes {{{
