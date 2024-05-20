@@ -1,5 +1,9 @@
 " ~/.vim/init.vim
 " ~/.config/nvim/init.vim
+"
+" Disable netrw in favor of nvim-tree
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
 
 source ~/.vim/settings.vim " generic Vim/Neovim settings
 source ~/.vim/mappings.vim " key mappings
@@ -16,11 +20,6 @@ nmap <Leader>I :Lazy<CR>
 
 " Execute selection as vim command
 command! -bar -range VimEval execute <line1> . ',' . <line2> . 'y|@"'
-
-" Colors {{{
-colorscheme catppuccin_frappe
-let g:airline_theme='catppuccin_frappe'
-" }}}
 
 " Filetypes {{{
 augroup Filetypes

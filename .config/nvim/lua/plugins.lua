@@ -26,6 +26,8 @@ function setup_plugins()
   use 'tpope/vim-eunuch'
   use 'tpope/vim-fugitive'
 
+  use 'nvim-lua/plenary.nvim'
+
   use 'sbulav/nredir.nvim'
   use { 'tzachar/highlight-undo.nvim',
     config = function() require('highlight-undo').setup({
@@ -54,8 +56,21 @@ function setup_plugins()
   use 'google/vim-searchindex'
   -- use 'henrik/vim-indexed-search'
 
-  -- NERDtree
-  use 'scrooloose/nerdtree'
+  -- nvim-tree
+  use { 'nvim-tree/nvim-tree.lua',
+    cmd = { 'NvimTreeToggle', 'NvimTreeOpen', 'NvimTreeFocus', 'NvimTreeFindFileToggle' },
+    event = 'User DirOpened',
+    config = function()
+      require('nvim-tree').setup {
+        filters = {
+          dotfiles = true,
+        },
+      }
+    end
+  }
+
+  vim.keymap.set('n', '<C-n>', '<cmd>NvimTreeToggle<CR>', {})
+  vim.keymap.set('n', '<Leader>e', '<cmd>NvimTreeFocus<CR>', {})
 
   -- NERD Commenter
   use 'scrooloose/nerdcommenter'
@@ -68,6 +83,20 @@ function setup_plugins()
   map <C-_> <Plug>NERDCommenterToggle
   imap <C-_> <C-o><Plug>NERDCommenterToggle
   ]]
+ 
+  -- telescope
+  use { 'nvim-telescope/telescope.nvim', tag = '0.1.6',
+    config = function()
+      local builtin = require('telescope.builtin')
+      vim.keymap.set('n', '<Leader>:', builtin.commands, {})
+      vim.keymap.set('n', '<Leader>?', builtin.help_tags, {})
+      vim.keymap.set('n', '<C-t>', builtin.find_files, {})
+      vim.keymap.set('n', '<C-x>b', builtin.buffers, {})
+    end
+  }
+
+  -- harpoon
+  use { 'ThePrimeagen/harpoon', branch = 'harpoon2' }
 
   -- fzf
   use { 'junegunn/fzf', build = ':call fzf#install()' }
@@ -101,19 +130,23 @@ function setup_plugins()
   map <Leader>jh <Plug>(easymotion-linebackward)
   ]]
 
-  -- Airline
-  use { 'vim-airline/vim-airline',
-    dependencies = {
-      'vim-airline/vim-airline-themes',
-      'ryanoasis/vim-devicons'
-    }
-  }
-
   -- Colors
-  use 'flazz/vim-colorschemes'
-  use 'dylanaraps/wal.vim' -- Pywal integration
+  use { 'catppuccin/nvim', name = 'catppuccin', priority = 900 }
 
-  use { 'catppuccin/vim', name = 'catppuccin' }
+  -- Lualine
+  use { 'nvim-lualine/lualine.nvim',
+    dependencies = {
+      'nvim-tree/nvim-web-devicons'
+    },
+
+    config = function()
+      require('lualine').setup {
+        options = {
+          theme = 'catppuccin'
+        }
+      }
+    end
+  }
 
   use 'christoomey/vim-tmux-navigator' -- tmux integration
 
@@ -130,24 +163,22 @@ function setup_plugins()
   vim.g.camelcasemotion_key = ','
 
   -- vimwiki
-  use 'vimwiki/vimwiki'
+  use { 'vimwiki/vimwiki', keys = { { '<Leader>ww', '<Plug>VimwikiIndex<CR>' } } }
   vim.cmd [[
   let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.wiki'}]
   autocmd FileType vimwiki syntax on
   ]]
 
-  use 'terryma/vim-multiple-cursors'
-
   -- Indent level lines
   use { 'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
     config = function()
-      require('ibl').setup({
+      require('ibl').setup {
         scope = {
           enabled = true,
           show_end = true
         }
-      })
+      }
     end
   }
 
@@ -182,3 +213,4 @@ end
 
 require('lazy').setup(setup_plugins())
 
+vim.cmd.colorscheme 'catppuccin-frappe'
