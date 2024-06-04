@@ -1,0 +1,49 @@
+# Source profile for all shells
+source $HOME/.profile
+
+# Keybindings
+bindkey -e # emacs-style keybindings
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+bindkey '^P' history-search-backward
+bindkey '^N' history-search-forward
+
+# History
+# Placed at very end to override prezto settings
+export HISTFILE=$HOME/.zsh_history
+export SAVEHIST=500
+setopt inc_append_history # Append incrementally
+# setopt share_history # Share history between shells
+
+# Ignore when command starts with a space
+setopt histignorespace
+
+# Prompt
+autoload -Uz vcs_info
+precmd() { vcs_info }
+zstyle ':vcs_info:git:*' formats '(%b)'
+setopt PROMPT_SUBST
+
+# Prompt
+# Courtesy of https://stackoverflow.com/a/6086978, adapted for zsh
+color_prompt() {
+    local newline=$'\n'
+    local __user_and_host="%F{green}%n@%m%f"
+    local __cur_location="%F{blue}%~%f"
+    local __git_info="%F{red}${vcs_info_msg_0_}%f"
+    local __root_prompt="#"
+    local __regular_prompt="$"
+    local __prompt_tail="%F{magenta}%(!.${__root_prompt}.${__regular_prompt})%f"
+    export PROMPT="%B${__user_and_host} ${__cur_location} ${__git_info}${newline}${__prompt_tail}%b "
+}
+
+color_prompt
+
+
+# cd dir/filename -> cd dir
+# http://unix.stackexchange.com/a/76233
+cd() {
+	[[ ! -e $argv[-1] ]] || [[ -d $argv[-1] ]] || argv[-1]=${argv[-1]%/*}
+	builtin cd "$@"
+}
+
