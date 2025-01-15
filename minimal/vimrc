@@ -1,7 +1,7 @@
 " ~/.vimrc
 
 " General
-set nocompatible " it's not the 1970s anymore, so kick vim a couple decades into the new millenium
+set nocompatible " turn off vi compatibility
 set number " show line number
 set wrap " wrap lines
 set backspace=indent,eol,start " make backspace key work
@@ -15,7 +15,7 @@ set incsearch hlsearch
 set ignorecase smartcase
 set showmatch
 
-" Make j and k navigate visual lines (i.e. when a line is wrapped)
+" Navigation: make j/k navigate up/down visually by wrapped lines, not literal lines
 noremap j gj
 noremap k gk
 noremap gj j
