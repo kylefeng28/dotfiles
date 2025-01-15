@@ -32,10 +32,6 @@ if has('spell')
 	set spellfile=$HOME/spell/en.utf-8.add
 	set spell
 endif
-
-" Features for Oni
-if exists('g:gui_oni')
-endif
 " }}}
 
 " Visual {{{

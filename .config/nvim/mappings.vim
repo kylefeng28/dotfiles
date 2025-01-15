@@ -27,25 +27,6 @@ noremap <C-w>t :tabnew<CR>
 noremap <C-w><C-t> :tabnew<CR>
 noremap <C-w><C-w> :tabclose<CR>
 
-" CUA keybindings
-nmap <C-S-s> :w<CR>
-imap <C-S-s> <C-o>:w<CR>
-
-" OS X keybindings (not currently supported)
-nmap <D-S> :w<CR>
-imap <D-S> <C-o>:w<CR>
-
-" Tab movement
-nmap <S-D-{> gT
-nmap <S-D-}> gt
-
-" Reloads .vimrc
-nmap <Leader>R :source $MYVIMRC<CR>
-
-" Opens .vimrc for editing
-nmap <Leader>E :edit $MYVIMRC<CR>
-nmap <Leader>M :edit ~/.vim/mappings.vim<CR>
-
 " vim-tmux-navigator
 " Window navigation
 noremap <C-h> <C-w>h

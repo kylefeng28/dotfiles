@@ -17,28 +17,34 @@ function setup_plugins()
 
   -- in Tim Pope we trust
   use 'tpope/vim-sensible'     -- better default settings
-  use 'tpope/vim-endwise'      -- add end keywords
   use 'tpope/vim-unimpaired'   -- better default mappings
   use 'tpope/vim-surround'     -- quoting/parenthesizing made simple
   use 'tpope/vim-repeat'       -- required to support `.` with some plugins
   use 'tpope/vim-characterize' -- `ga` gets the Unicode description of a char
 
   use 'tpope/vim-eunuch'
+  vim.g.eunuch_no_maps = 1
   use 'tpope/vim-fugitive'
 
   use 'nvim-lua/plenary.nvim'
 
   use 'sbulav/nredir.nvim'
+
+  -- Highlight yank
+  -- Formerly provided by https://github.com/machakann/vim-highlightedyank
+  -- Highlight groups: Visual or IncSearch. Some themes use HighlightedyankRegion
+  vim.cmd [[
+    autocmd TextYankPost * silent! lua vim.highlight.on_yank { 'Visual', timeout=200 }
+  ]]
+
+  -- Highlight undo/redo
+  -- Highlight groups: HighlightUndo, HighlightRedo
   use { 'tzachar/highlight-undo.nvim',
     config = function() require('highlight-undo').setup({
-      hlgroup = 'HighlightUndo',
-      duration = 300,
-      keymaps = {
-        {'n', 'u', 'undo', {}},
-        {'n', '<C-r>', 'redo', {}},
-      }
+      duration = 300
     })
-    end
+    end,
+    keys = { { 'u' }, { '<C-r>' }, { 'p' }, { 'P' } }
   }
 
   -- start screen
@@ -162,6 +168,10 @@ function setup_plugins()
   use 'bkad/CamelCaseMotion'
   vim.g.camelcasemotion_key = ','
 
+  -- Treesitter
+  use { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' }
+  use 'p00f/nvim-ts-rainbow' -- Rainbow parentheses
+
   -- vimwiki
   use { 'vimwiki/vimwiki', keys = { { '<Leader>ww', '<Plug>VimwikiIndex<CR>' } } }
   vim.cmd [[
@@ -189,7 +199,7 @@ function setup_plugins()
 -- TODO FIXME
 -- use 'thoughtstream/Damian-Conway-s-Vim-Setup', { 'rtp': 'plugin' }
 
-  use 'atweiden/vim-dragvisuals'
+  use 'Mariappan/vim-dragvisuals'
   vim.cmd [[
   vmap <expr> <Left>  DVB_Drag('left')
   vmap <expr> <Right> DVB_Drag('right')
@@ -212,5 +222,19 @@ function setup_plugins()
 end
 
 require('lazy').setup(setup_plugins())
+
+require('nvim-treesitter.configs').setup {
+  ensure_installed = { 'c', 'lua', 'vim' },
+  sync_install = false,
+
+  highlight = {
+    enable = true
+  },
+  rainbow = {
+    enable = true,
+    extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+    max_file_lines = nil, -- Do not enable for files with more than n lines, int
+  }
+}
 
 vim.cmd.colorscheme 'catppuccin-frappe'

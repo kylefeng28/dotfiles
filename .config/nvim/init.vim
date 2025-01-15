@@ -1,25 +1,40 @@
 " ~/.vim/init.vim
 " ~/.config/nvim/init.vim
-"
+
 " Disable netrw in favor of nvim-tree
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
 
-source ~/.vim/settings.vim " generic Vim/Neovim settings
-source ~/.vim/mappings.vim " key mappings
+let $VIM_CONFIG = has('nvim') ? stdpath('config') : '~/.vim'
+
+source $VIM_CONFIG/settings.vim " generic Vim/Neovim settings
+source $VIM_CONFIG/mappings.vim " key mappings
 
 filetype plugin indent on
 
-" Plugin configuration
-lua << EOF
-require('plugins') -- See ~/.vim/lua/plugins.lua
-EOF
+" Plugin configuration: See ~/.vim/lua/plugins.lua
+lua require('plugins')
 
-nmap <Leader>P :edit ~/.vim/lua/plugins.lua<CR>
+" Convenient vimrc commands
+nmap <Leader>E :edit $MYVIMRC<CR>
+nmap <Leader>R :source $MYVIMRC<CR>
+nmap <Leader>P :edit $VIM_CONFIG/lua/plugins.lua<CR>
+nmap <Leader>M :edit $VIM_CONFIG/mappings.vim<CR>
 nmap <Leader>I :Lazy<CR>
 
 " Execute selection as vim command
 command! -bar -range VimEval execute <line1> . ',' . <line2> . 'y|@"'
+command! -bar -range LuaEval <line1>,<line2> call s:luaeval_selection(<line1>, <line2>)
+
+function! s:luaeval_selection(start, end) range
+	let s = join(getline(a:start, a:end), '\n')
+	let command = "lua << EOF\n" . s . "\nEOF"
+	echo command
+	redir => result
+	execute command
+	redir END
+	echo result
+endfunction
 
 " Filetypes {{{
 augroup Filetypes
