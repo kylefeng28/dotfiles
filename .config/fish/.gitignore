@@ -1,0 +1,8 @@
+fish_history
+fish_variables
+
+completions/*
+conf.d/z.fish
+
+fishd.*
+config.fish.local

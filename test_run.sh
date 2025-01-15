@@ -17,7 +17,7 @@ cmd=$1; shift
 case $cmd in
 	nvim)
 		set_xdg_env
-		exec nvim
+		nvim
 		;;
 	bash)
 		set -x
@@ -27,7 +27,12 @@ case $cmd in
 		set -x
 		export ZDOTDIR=$(mktemp -d)
 		echo "source $1" > $ZDOTDIR/.zshrc
-		exec zsh
+		zsh
+		;;
+	fish)
+		set -x
+		set_xdg_env
+		fish
 		;;
 esac
 
