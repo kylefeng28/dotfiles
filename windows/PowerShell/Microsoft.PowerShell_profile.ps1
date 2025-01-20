@@ -4,6 +4,11 @@
 
 # https://github.com/felixrieseberg/windows-development-environment/blob/master/Microsoft.PowerShell-profile.ps1
 
+# Check if connected via SSH
+function Test-IsRemote {
+  return Test-Path env:SSH_CLIENT;
+}
+
 # Increase history
 $MaximumHistoryCount = 10000
 
@@ -26,6 +31,26 @@ $ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 if (Test-Path($ChocolateyProfile)) {
   Import-Module "$ChocolateyProfile"
 }
+
+# Anaconda
+$CONDA_HOME = "$HOME\anaconda3"
+function conda_activate {
+  If (Test-Path "$CONDA_HOME\Scripts\conda.exe") {
+      (& "$CONDA_HOME\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
+  }
+}
+
+function msys() {
+	C:/msys64/msys2_shell.cmd -defterm -here -no-start -msys
+}
+function mingw() {
+	C:/msys64/msys2_shell.cmd -defterm -here -no-start -mingw
+}
+
+Set-Alias vim nvim
+
+$PS_DIR=(Split-Path -Path $profile)
+.  "$PS_DIR\prompt.ps1"
 
 # Helper Functions
 #######################################################

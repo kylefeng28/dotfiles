@@ -6,22 +6,31 @@ set -euo pipefail
 
 ROOT=$(realpath $(dirname -- "$0"))
 
-set_xdg_env() {
-	set -x
-	export XDG_CONFIG_HOME="$ROOT/.config"
-	set +x
-}
+while getopts "c:" opt; do
+  case "$opt" in
+    c)  config_home=$OPTARG
+      ;;
+  esac
+done
+shift $((OPTIND-1))
 
+if [[ $# -eq 0 ]] ; then
+    echo "usage: $0 [-c config-home-dir] <command>"
+    exit 1
+fi
+
+config_home="${config_home:-$ROOT/.config}"
 cmd=$1; shift
 
+set_xdg_env() {
+	echo "Setting XDG_CONFIG_HOME to $config_home"
+	export XDG_CONFIG_HOME="$config_home"
+}
+
 case $cmd in
-	nvim)
-		set_xdg_env
-		nvim
-		;;
 	bash)
 		set -x
-		exec bash --rcfile $1
+		bash --rcfile $1
 		;;
 	zsh)
 		set -x
@@ -29,10 +38,9 @@ case $cmd in
 		echo "source $1" > $ZDOTDIR/.zshrc
 		zsh
 		;;
-	fish)
-		set -x
+	nvim|fish|*)
 		set_xdg_env
-		fish
+		$cmd
 		;;
 esac
 

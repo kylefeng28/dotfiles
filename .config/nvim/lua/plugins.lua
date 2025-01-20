@@ -179,16 +179,39 @@ function setup_plugins()
   autocmd FileType vimwiki syntax on
   ]]
 
+  -- OSC52 for copying to clipboard
+  if not vim.fn.has('mac') then
+    use { 'ojroques/nvim-osc52',
+      config = function()
+        local function copy(lines, _)
+          require('osc52').copy(table.concat(lines, '\n'))
+        end
+
+        local function paste()
+          return {vim.fn.split(vim.fn.getreg(''), '\n'), vim.fn.getregtype('')}
+        end
+
+        vim.g.clipboard = {
+          name = 'osc52',
+          copy = {['+'] = copy, ['*'] = copy},
+          paste = {['+'] = paste, ['*'] = paste},
+        }
+      end
+    }
+  end
+
   -- Indent level lines
   use { 'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
     config = function()
-      require('ibl').setup {
-        scope = {
-          enabled = true,
-          show_end = true
+      if not vim.g.vscode then
+        require('ibl').setup {
+          scope = {
+            enabled = true,
+            show_end = true
+          }
         }
-      }
+      end
     end
   }
 
