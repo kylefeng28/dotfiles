@@ -20,7 +20,7 @@ if [[ $# -eq 0 ]] ; then
 fi
 
 config_home="${config_home:-$ROOT/.config}"
-cmd=$1; shift
+cmd=$@; shift
 
 set_xdg_env() {
 	echo "Setting XDG_CONFIG_HOME to $config_home"
