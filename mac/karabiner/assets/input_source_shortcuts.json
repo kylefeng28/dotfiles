@@ -1,0 +1,77 @@
+{
+  "title": "Input Source Shortcuts",
+  "rules": [
+    {
+      "description": "Input Source Shortcuts",
+      "manipulators": [
+        {
+          "type": "basic",
+          "conditions": [],
+          "from": { "key_code": "comma", "modifiers": { "optional": [ "any" ] } },
+          "to": [ { "set_variable": { "name": "input_switch_layer", "value": 1 } } ],
+          "to_after_key_up": [ { "set_variable": { "name": "input_switch_layer", "value": 0 } } ],
+          "to_if_alone": [ { "key_code": "comma" } ],
+          "to_if_held_down": [ { "key_code": "comma" } ]
+        },
+        {
+          "type": "basic",
+          "conditions": [ { "name": "input_switch_layer", "type": "variable_if", "value": 1 } ],
+          "from": { "key_code": "1", "modifiers": { "optional": [ "any" ] } },
+          "to": [
+            {
+              "select_input_source": {
+                "input_source_id": "^com\\.apple\\.keylayout\\.US$",
+                "language": "^en$"
+              }
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "conditions": [ { "name": "input_switch_layer", "type": "variable_if", "value": 1 } ],
+          "from": {
+            "key_code": "2",
+            "modifiers": { "optional": [ "any" ] }
+          },
+          "to": [
+            {
+              "select_input_source": {
+                "input_mode_id": "^com\\.apple\\.inputmethod\\.SCIM\\.ITABC$",
+                "input_source_id": "^com\\.apple\\.inputmethod\\.SCIM\\.ITABC$",
+                "language": "^zh-Hans$"
+              }
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "conditions": [ { "name": "input_switch_layer", "type": "variable_if", "value": 1 } ],
+          "from": { "key_code": "3", "modifiers": { "optional": [ "any" ] } },
+          "to": [
+            {
+              "select_input_source": {
+                "input_mode_id": "^com\\.apple\\.inputmethod\\.Japanese$",
+                "input_source_id": "^com\\.apple\\.inputmethod\\.Kotoeri\\.RomajiTyping\\.Japanese$",
+                "language": "^ja$"
+              }
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "conditions": [ { "name": "input_switch_layer", "type": "variable_if", "value": 1 } ],
+          "from": { "key_code": "4", "modifiers": { "optional": [ "any" ] } },
+          "to": [
+            {
+              "select_input_source": {
+                "input_mode_id": "^com\\.apple\\.inputmethod\\.Korean\\.HNCRomaja$",
+                "input_source_id": "^com\\.apple\\.inputmethod\\.Korean\\.HNCRomaja$",
+                "language": "^ko$"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
