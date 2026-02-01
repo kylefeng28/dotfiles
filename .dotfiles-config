@@ -1,0 +1,9 @@
+# Format: repo_path -> target_path
+# e.g. path/in/dotfile/repo -> ~/path/to/target
+# Use $HOST for hostname substitution
+
+config/fish -> ~/.config/fish
+config/hypr -> ~/.config/hypr
+config/kitty -> ~/.config/kitty
+config/niri -> ~/.config/niri
+config/nvim -> ~/.config/nvim
