@@ -37,6 +37,18 @@ If you want to start your own neovim config, I would recommend starting off with
 - [theopn/kickstart.vim](https://github.com/theopn/kickstart.vim) - vimscript version of kickstart.nvim that uses Plug
 - [rstacruz/vim-from-scratch](https://github.com/rstacruz/vim-from-scratch) for regular Vim (repo is deprecated but still useful to see for how VimScript works)
 
+## Linux Desktop 🚀
+Wayland for the win
+
+- [kitty](https://github.com/kovidgoyal/kitty) - terminal
+- [hyprland](https://hypr.land/) - Wayland compositor with dynamic tiling
+- [niri](https://github.com/YaLTeR/niri) - Wayland compositor with scrollable tiling
+- [quickshell](https://quickshell.org/) - composable and reusable desktop widgets (status bars, menus, notifications, etc)
+
+Quickshell configs:
+- [Dank Linux (dms)](https://danklinux.com/docs/getting-started) - full-fledged suite of quickshell widgets and desktop customizations for niri and hyprland. maximum dank
+- [caelestia shell](https://github.com/caelestia-dots/shell) - another great suite of quickshell widgets for hyprland
+
 
 There are also a lot of distros like [LazyVim](https://www.lazyvim.org/), [LunarVim](https://www.lunarvim.org/), [NvChad](https://nvchad.com/) that come with a much more IDE-like setup out of the box; these are useful for inspiration for plugins but I would not recommend starting off with these.
 

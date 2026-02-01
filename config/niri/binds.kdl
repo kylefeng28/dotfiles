@@ -1,0 +1,5 @@
+binds {
+    Mod+Backslash hotkey-overlay-title="Show focused window information" {
+        spawn "bash" "-c" "notify-send Niri \"$(niri msg focused-window | grep -E 'Title|App ID|PID')\"";
+    }
+}
