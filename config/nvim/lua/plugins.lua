@@ -3,16 +3,20 @@
 -- Install lazy.nvim
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
-  lazyrepo = 'https://github.com/folke/lazy.nvim.git'
+  local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
   vim.fn.system({ 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath })
 end
 vim.opt.rtp:prepend(lazypath)
 
 -- Small shim to help migrate packer.nvim to lazy.nvim
-function setup_plugins()
-  plugins = {}
-  function use(plugin_spec)
+local function setup_plugins()
+  local plugins = {}
+  local function use(plugin_spec)
     plugins[#plugins + 1] = plugin_spec
+  end
+
+  local function disable(plugin_name)
+    plugins[#plugins + 1] = { plugin_name, enabled = false }
   end
 
   -- in Tim Pope we trust
@@ -89,7 +93,7 @@ function setup_plugins()
   map <C-_> <Plug>NERDCommenterToggle
   imap <C-_> <C-o><Plug>NERDCommenterToggle
   ]]
- 
+
   -- telescope
   use { 'nvim-telescope/telescope.nvim', tag = '0.1.6',
     config = function()
@@ -109,8 +113,8 @@ function setup_plugins()
   use { 'junegunn/fzf.vim' }
 
   vim.cmd [[
-  nmap <C-t> :Files<CR>
-  nmap <C-x>b :Buffers<CR>
+  " nmap <C-t> :Files<CR>
+  " nmap <C-x>b :Buffers<CR>
 
   " Mapping selecting mappings
   nmap <Leader><Tab> <Plug>(fzf-maps-n)
@@ -222,7 +226,7 @@ function setup_plugins()
 -- TODO FIXME
 -- use 'thoughtstream/Damian-Conway-s-Vim-Setup', { 'rtp': 'plugin' }
 
-  use 'Mariappan/vim-dragvisuals'
+  use 'joshukraine/dragvisuals'
   vim.cmd [[
   vmap <expr> <Left>  DVB_Drag('left')
   vmap <expr> <Right> DVB_Drag('right')
@@ -241,23 +245,29 @@ function setup_plugins()
   use 'sheerun/vim-polyglot'
   vim.opt.shortmess:remove('A') -- workaround for https://github.com/sheerun/vim-polyglot/issues/765
 
+  -- LazyVim
+  vim.g.lazyredraw = false -- disable to make noice work
+  use { "LazyVim/LazyVim", import = "lazyvim.plugins" }
+
+  disable "folke/noice.nvim"
+  disable "folke/flash.nvim"
+  disable "nvim-mini/mini.pairs"
+
+  -- Load other plugins
+  use { import = "plugin_specs" }
+
   return plugins
 end
 
-require('lazy').setup(setup_plugins())
-
-require('nvim-treesitter.configs').setup {
-  ensure_installed = { 'c', 'lua', 'vim' },
-  sync_install = false,
-
-  highlight = {
-    enable = true
+require('lazy').setup({
+  spec = setup_plugins(),
+  install = {
+    missing = false, -- don't install missing plugins on startup
   },
-  rainbow = {
-    enable = true,
-    extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-    max_file_lines = nil, -- Do not enable for files with more than n lines, int
-  }
-}
+  checker = {
+    enabled = true, -- don't automatically check for plugin updates
+    notify = true, -- get a notification when new updates are found
+  },
+})
 
 vim.cmd.colorscheme 'catppuccin-frappe'

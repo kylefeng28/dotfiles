@@ -1,29 +1,48 @@
 #!/usr/bin/env python3
+import os
 import sys
 import shutil
 from pathlib import Path
 import platform
+import tomllib
 
 DOTFILES = Path.home() / "dotfiles"
 HOME = Path.home()
 CONFIG = DOTFILES / ".dotfiles-config"
-HOSTNAME = platform.node()
+HOSTNAME = os.getenv('HOSTNAME') or platform.node()
 
-def load_mappings():
-    """Load symlink mappings from config file"""
-    if not CONFIG.exists():
-        CONFIG.write_text("# Format: repo_path -> target_path\n# e.g. path/in/dotfile/repo -> ~/path/to/target\n# Use $HOST for hostname substitution\n")
-        return {}
+def load_config(config_file):
+    """Load TOML config file"""
+    config_path = Path(config_file)
 
+    if not config_path.exists():
+        print(f"No config file found!")
+        sys.exit(1)
+
+    try:
+        with open(config_path, 'rb') as f:
+            return tomllib.load(f)
+    except Exception as e:
+        print(f"Error parsing config: {e}")
+        sys.exit(1)
+
+def get_mappings(config):
+    """Extract mappings from config"""
     mappings = {}
-    for line in CONFIG.read_text().splitlines():
-        line = line.strip()
-        if not line or line.startswith('#'):
-            continue
-        repo_path, target = line.split('->', 1)
+
+    for repo_path, target in config.items():
+        repo_path = repo_path.replace('$HOST', HOSTNAME)
         target = target.replace('$HOST', HOSTNAME)
-        mappings[repo_path.strip()] = target.strip()
+        mappings[repo_path] = target
+
     return mappings
+
+def add_to_config(config_file, repo_path: Path, target: Path):
+    with config_file.open('a') as f:
+        target_path_relative_to_home = target.relative_to(HOME)
+        print(target_path_relative_to_home)
+        f.write(f'"{repo_path}" = "{target_path_relative_to_home}"\n')
+    print(f"Added mapping to config")
 
 def import_file(target: Path, repo_path: Path):
     """Move a file (target, usually from ~) into dotfiles repo and create symlink"""
@@ -73,11 +92,7 @@ def import_file(target: Path, repo_path: Path):
     print(f"Created symlink {target} -> {repo_file}")
     
     # Add to config
-    with CONFIG.open('a') as f:
-        target_path_relative_to_home = target.relative_to(HOME)
-        print(target_path_relative_to_home)
-        f.write(f"{repo_path} -> {target_path_relative_to_home}\n")
-    print(f"Added mapping to config")
+    add_to_config(CONFIG, repo_path, target)
 
 # TODO features:
 # setup a single symlink (via command line arg)
@@ -85,9 +100,14 @@ def import_file(target: Path, repo_path: Path):
 # interactive handling if file already exists / has symlink conflict
 def setup():
     """Setup symlinks on a new system"""
-    mappings = load_mappings()
+    config = load_config(CONFIG)
+    if not config:
+        print("No config found")
+        return
+
+    mappings = get_mappings(config)
     if not mappings:
-        print("No mappings found in config")
+        print("No mappings to process")
         return
     
     for repo_path, target_path in mappings.items():
@@ -109,14 +129,21 @@ def setup():
             target.parent.mkdir(parents=True, exist_ok=True)
             target.symlink_to(repo_file)
 
-        # Backup existing file
-        if target.exists() and not target.is_symlink():
+        status = None
+
+        # Target exists => create symlink
+        if not target.exists():
+            create_symlink()
+            status = 'created symlink'
+        # Target already exists => backup existing file first
+        elif not target.is_symlink():
             create_backup()
             create_symlink()
             status = 'created symlink, backed up previous file'
+        # Symlink already exists
         elif target.is_symlink():
             if target.resolve() == repo_file.resolve():
-                status = 'symlink already exists'
+                status = 'symlink already exists, skipping'
             else:
                 print(f"Symlink conflict: {target} points to {target.resolve()}")
                 # TODO: choice between unlinking or creating backup

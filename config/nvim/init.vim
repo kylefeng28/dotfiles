@@ -13,7 +13,10 @@ source $VIM_CONFIG/mappings.vim " key mappings
 filetype plugin indent on
 
 " Plugin configuration: See ~/.vim/lua/plugins.lua
-lua require('plugins')
+" Don't load for git commit messages / rebase and in VS code
+if !empty($GIT_EXEC_PATH) || !exists('g:vscode')
+  lua require('plugins')
+endif
 
 " Convenient vimrc commands
 nmap <Leader>E :edit $MYVIMRC<CR>
