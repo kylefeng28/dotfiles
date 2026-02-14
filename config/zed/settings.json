@@ -1,0 +1,57 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "format_on_save": "off",
+  "theme": "One Light",
+  "telemetry": {
+    "diagnostics": true,
+    "metrics": true,
+  },
+  "redact_private_values": true,
+
+  "agent": {
+    "enabled": true,
+    "default_model": {
+      "provider": "zed.dev",
+      "model": "claude-3-5-sonnet-latest",
+    },
+  },
+  "confirm_quit": true,
+  "ui_font_size": 14,
+  "buffer_font_size": 14,
+
+  // "theme": {
+  //   "mode": "system",
+  //   "light": "Catppuccin Latte",
+  //   // One Dark
+  //   "dark": "Catppuccin Frappé"
+  // },
+
+  // Vim settings
+  "vim_mode": true,
+  "vim": {
+    "toggle_relative_line_numbers": true,
+    "use_system_clipboard": "never",
+    "use_smartcase_find": true,
+    "highlight_on_yank_duration": 200,
+  },
+
+  // Custom agent servers using ACP
+  // https://zed.dev/docs/ai/external-agents#custom-agents
+  "agent_servers": {
+    // https://kiro.dev/docs/cli/acp/
+    "Kiro Agent": {
+      "type": "custom",
+      "command": "~/.local/bin/kiro-cli",
+      "args": ["acp"],
+      "env": {}
+    }
+  },
+
+}
