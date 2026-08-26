@@ -1,0 +1,7 @@
+---
+name: personal
+version: "20260825"
+sort: by_weight
+use_preset_vocabulary: true
+import_tables:
+  - terra_pinyin

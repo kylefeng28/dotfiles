@@ -1,0 +1,186 @@
+# Rime schema
+# encoding: utf-8
+
+schema:
+  schema_id: bpmf_py
+  name: 注拼
+  version: "1.0"
+  author:
+    - Kyle Feng
+  description: |
+    Type bopomofo (zhuyin) using pinyin. For example:
+    - typing `b` -> "ㄅ", `m` -> "ㄆ", `m` -> "ㄇ", `f` -> "ㄈ"
+    - typing `ao` -> "ㄠ", `zhong` -> "ㄓㄨㄥ" which can converted to "中".
+    - typing `nihao` -> produces `ㄋㄧˇ ㄏㄠˇ` which can be converted to "你好"
+
+    This is inspired by Japanese romaji keyboards where typing `a` produces あ and typing `watashi` produces "わたし"
+    which can be converted to "私".
+
+    Based on rime-bopomofo schema by 佛振 <chen.sst@gmail.com>.
+    https://github.com/rime/rime-bopomofo/blob/master/bopomofo.schema.yaml
+
+  dependencies:
+    - stroke
+
+switches:
+  - name: ascii_mode
+    reset: 0
+    states: [ 中文, 西文 ]
+    abbrev: [ 中, Ａ ]
+  - name: full_shape
+    states: [ 半角, 全角 ]
+  - options:
+      - zh_hant
+      - zh_hans
+      - zh_hant_hk
+      - zh_hant_tw
+    states:
+      - 傳統漢字
+      - 简化字
+      - 香港字形
+      - 臺灣字形
+    abbrev: [ 漢, 简, 港, 臺 ]
+  - name: ascii_punct
+    states: [ 。，, ．， ]
+
+engine:
+  processors:
+    - ascii_composer
+    - recognizer
+    - key_binder
+    - speller
+    - punctuator
+    - selector
+    - navigator
+    - fluency_editor
+  segmentors:
+    - ascii_segmentor
+    - matcher
+    - abc_segmentor
+    - punct_segmentor
+    - fallback_segmentor
+  translators:
+    - punct_translator
+    - table_translator@custom_phrase
+    - reverse_lookup_translator
+    - script_translator
+  filters:
+    - simplifier@zh_hans
+    - simplifier@zh_hant_hk
+    - simplifier@zh_hant_tw
+    - uniquifier
+
+speller:
+  alphabet: 'zyxwvutsrqponmlkjihgfedcba-;/<,\.'
+  initials: zyxwvutsrqponmlkjihgfedcba
+  finals: '-;/<,\.'
+  delimiter: " '"
+  algebra:
+    __patch:
+      - pinyin:/abbreviation
+      - pinyin:/spelling_correction
+      - pinyin:/key_correction
+      - __append:
+          - derive/^([a-z]+)[0-5]$/$1/
+          - 'erase/^.*5$/'
+          - 'xlit 1234 -/<\'
+          - 'derive/^(.*)-$/$1;/'
+          - 'derive/^(.*)<$/$1,/'
+          - 'derive/^(.*)\\$/$1./'
+
+translator:
+  dictionary: terra_pinyin
+  spelling_hints: 10
+  always_show_comments: true
+  prism: bpmf_py
+  enable_completion: true
+  preedit_format:
+    __include: bpmf_py:/pinyin_to_zhuyin
+    __append:
+      - 'xform [-;] ˉ'
+      - 'xform / ˊ'
+      - 'xform [<,] ˇ'
+      - 'xform [\\.] ˋ'
+
+  comment_format:
+    __include: bpmf_py:/pinyin_to_zhuyin
+    __append:
+      - xform/(\D+)1/$1ˉ/
+      - xform/(\D+)2/$1ˊ/
+      - xform/(\D+)3/$1ˇ/
+      - xform/(\D+)4/$1ˋ/
+      - xform/(\D+)5/$1˙/
+
+custom_phrase:
+  dictionary: ""
+  user_dict: custom_phrase
+  db_class: stabledb
+  enable_completion: false
+  enable_sentence: false
+  initial_quality: 1
+
+reverse_lookup:
+  dictionary: stroke
+  enable_completion: true
+  prefix: "`"
+  suffix: "'"
+  tips: 〔筆畫〕
+  preedit_format:
+    - xlit/hspnz/一丨丿丶乙/
+  comment_format:
+    __patch:
+      - zhuyin:/pinyin_to_zhuyin
+      - __append:
+          - xform/1//
+          - 'xlit|bpmfdtnlgkhjqxZCSrzcsiuvaoeEAIOUMNKGR2345|ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦˊˇˋ˙|'
+
+punctuator:
+  import_preset: symbols
+
+editor:
+  bindings:
+    space: toggle_selection
+    Tab: toggle_selection
+    Return: commit_comment
+    Shift+Return: commit_script_text
+
+key_binder:
+  import_preset: default
+  bindings:
+    - { when: always, accept: Control+Shift+4, toggle: zh_hans }
+    - { when: always, accept: Control+Shift+dollar, toggle: zh_hans }
+    - { when: always, accept: Control+semicolon, toggle: zh_hans }
+    - { when: has_menu, accept: minus, send: minus }  # - for tone 1
+    - { when: paging, accept: minus, send: Page_Up }
+
+
+recognizer:
+  import_preset: default
+  patterns:
+    uppercase: "^[A-Z][-_+.'0-9A-Za-z]*$"
+    url: "^(www[.]|https?:|ftp:|mailto:).*$"
+    reverse_lookup: "`[a-z]*'?$"
+
+zh_hans:
+  option_name: zh_hans
+  opencc_config: t2s.json
+  tips: none
+  excluded_types: [ reverse_lookup ]
+
+zh_hant_hk:
+  option_name: zh_hant_hk
+  opencc_config: t2hk.json
+  tips: none
+  excluded_types: [ reverse_lookup ]
+
+zh_hant_tw:
+  option_name: zh_hant_tw
+  opencc_config: t2tw.json
+  tips: none
+  excluded_types: [ reverse_lookup ]
+
+__patch:
+  # 使用八股文語言模型
+  - grammar:/hant?
+  # 用家自選配置
+  - bpmf_py.custom:/patch?

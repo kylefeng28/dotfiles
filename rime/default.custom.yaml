@@ -1,0 +1,7 @@
+patch:
+  schema_list:
+    - schema: terra_pinyin
+      # - schema: luna_pinyin
+    - schema: bpmf_py
+
+  translator/dictionary: personal

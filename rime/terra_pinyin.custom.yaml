@@ -1,0 +1,6 @@
+patch:
+  editor/bindings:
+    space: toggle_selection
+    Tab: toggle_selection
+    Return: commit_comment
+    Shift+Return: commit_script_text

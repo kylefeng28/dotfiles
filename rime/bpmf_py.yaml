@@ -1,0 +1,75 @@
+pinyin_to_zhuyin:
+  # --- Exceptions first! ---
+  # qu/xu/ju/yu are actually qü, xü, jü, ü since ü pinyin drops the umlaut
+  # qu -> ㄑㄨ instead of ㄑㄩ
+  # Combined with the rules below, yun -> ㄩㄣ, yuan -> ㄩㄢ, etc
+  - xform/(j|q|x|y)u/$1v/
+  
+  # zero-initial spellings: y and w
+  # yi/ye/yan/yin/ying/yang/yong (yu -> ü is already handled above)
+  - xform/yi/i/
+  - xform/y(e|an|in|ing|ang|ong)/i$1/
+  # wu/wa/wo/wai/wei/wan/wang/weng
+  - xform/wu/u/
+  - xform/w(a|o|ai|ei|an|ang|eng)/u$1/
+  
+  # --- Initials (2-letter first, anchored to syllable start) ---
+  - xform/(^| |')zhi?/$1ㄓ/
+  - xform/(^| |')chi?/$1ㄔ/
+  - xform/(^| |')shi?/$1ㄕ/
+  - xform/(^| |')b/$1ㄅ/
+  - xform/(^| |')p/$1ㄆ/
+  - xform/(^| |')m/$1ㄇ/
+  - xform/(^| |')f/$1ㄈ/
+  - xform/(^| |')d/$1ㄉ/
+  - xform/(^| |')t/$1ㄊ/
+  - xform/(^| |')n/$1ㄋ/
+  - xform/(^| |')l/$1ㄌ/
+  - xform/(^| |')g/$1ㄍ/
+  - xform/(^| |')k/$1ㄎ/
+  - xform/(^| |')h/$1ㄏ/
+  - xform/(^| |')j/$1ㄐ/
+  - xform/(^| |')q/$1ㄑ/
+  - xform/(^| |')x/$1ㄒ/
+  - xform/(^| |')(?<!e)ri?/$1ㄖ/ # so that er becomes ㄦ
+  - xform/(^| |')zi?/$1ㄗ/
+  - xform/(^| |')ci?/$1ㄘ/
+  - xform/(^| |')si?/$1ㄙ/
+  
+  # --- Finals (longest first!) ---
+  - xform/iang/ㄧㄤ/
+  - xform/iong/ㄩㄥ/   # iong / yong; zhuyin spells it like üng
+  - xform/uang/ㄨㄤ/
+  - xform/uai/ㄨㄞ/
+  - xform/uan/ㄨㄢ/
+  - xform/ing/ㄧㄥ/
+  - xform/ang/ㄤ/
+  - xform/eng/ㄥ/
+  - xform/ong/ㄨㄥ/
+  - xform/ian/ㄧㄢ/
+  - xform/iao/ㄧㄠ/
+  - xform/van/ㄩㄢ/    # üan / yuan
+  - xform/vn/ㄩㄣ/     # ün / yun
+  - xform/ve/ㄩㄝ/     # üe / yue
+  
+  - xform/ui/ㄨㄟ/     # ui is short for uei
+  - xform/un/ㄨㄣ/     # un is short for uen (see j/q/x/y caveat below)
+  - xform/ai/ㄞ/
+  - xform/ei/ㄟ/
+  - xform/ao/ㄠ/
+  - xform/ou/ㄡ/
+  - xform/an/ㄢ/
+  - xform/en/ㄣ/
+  - xform/er/ㄦ/
+  - xform/ia/ㄧㄚ/
+  - xform/iê/ㄧㄝ/
+  - xform/in/ㄧㄣ/
+  - xform/iu/ㄧㄡ/     # iu is short for iou
+  - xform/ua/ㄨㄚ/
+  - xform/uo/ㄨㄛ/
+  - xform/v/ㄩ/        # ü / yu
+  - xform/i/ㄧ/
+  - xform/u/ㄨ/
+  - xform/a/ㄚ/
+  - xform/o/ㄛ/
+  - xform/e/ㄜ/
