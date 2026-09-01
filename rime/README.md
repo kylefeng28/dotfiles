@@ -2,12 +2,11 @@
 
 ### bpmf_py: `bpmf_py.schema.yaml` and `bpmf_py.yaml`.
 Type bopomofo (zhuyin) using pinyin. For example:
-- typing `b` -> "ㄅ", `m` -> "ㄆ", `m` -> "ㄇ", `f` -> "ㄈ"
-- typing `ao` -> "ㄠ", `zhong` -> "ㄓㄨㄥ" which can converted to "中".
-- typing `nihao` -> produces `ㄋㄧˇ ㄏㄠˇ` which can be converted to "你好"
+- typing `b` -> `ㄅ`, `p` -> `ㄆ`, `m` -> `ㄇ`, `f` -> `ㄈ`
+- typing `ao` -> `ㄠ`, `zhong` -> `ㄓㄨㄥ` -> can converted to `中`.
+- typing `nihao` -> produces `ㄋㄧˇ ㄏㄠˇ` -> can be converted to `你好`
 
-This is inspired by Japanese romaji keyboards where typing `a` produces あ and typing `watashi` produces "わたし"
-which can be converted to "私".
+This is inspired by Japanese romaji keyboards where typing `a` produces `あ` and typing `watashi` produces `わたし` which can be converted to `私`.
 
 Based on [rime-bopomofo schema](https://github.com/rime/rime-bopomofo/blob/master/bopomofo.schema.yaml).
 

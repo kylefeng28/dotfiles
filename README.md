@@ -2,6 +2,13 @@
 
 See the `minimal` directory for minimal dotfiles (< 100 lines) that can easily be copied to a remote host.
 
+## Interesting configs
+Links to some of my configs that might be of interest to people
+- [rime/bpmf_py.schema.yaml](https://github.com/kylefeng28/dotfiles/blob/main/rime/bpmf_py.schema.yaml): Rime config to output zhuyin (ㄅㄆㄇㄈ) + characters, but using pinyin spelling
+  - typing `b` -> `ㄅ`, `p` -> `ㄆ`, `ao` -> `ㄠ`, etc
+  - typing `zhong` -> `ㄓㄨㄥ` ->`中`, `nihao` -> `ㄋㄧˇ ㄏㄠˇ` -> `你好`
+  - inspired by Japanese romaji keyboards (e.g. `watashi` -> `わたし` -> `私`)
+
 ## Useful tools:
 On Mac, install [Homebrew](https://brew.sh/):
 

@@ -3,15 +3,16 @@ pinyin_to_zhuyin:
   # qu/xu/ju/yu are actually qü, xü, jü, ü since ü pinyin drops the umlaut
   # qu -> ㄑㄨ instead of ㄑㄩ
   # Combined with the rules below, yun -> ㄩㄣ, yuan -> ㄩㄢ, etc
-  - xform/(j|q|x|y)u/$1v/
+  - xform/(j|q|x)u/$1v/
+  - xform/yu/$1v/
   
   # zero-initial spellings: y and w
-  # yi/ye/yan/yin/ying/yang/yong (yu -> ü is already handled above)
+  # yi/ya/yo/ye/yai/yao/you/yan/yin/ying/yang/yong (yu -> ü is already handled above)
   - xform/yi/i/
-  - xform/y(e|an|in|ing|ang|ong)/i$1/
-  # wu/wa/wo/wai/wei/wan/wang/weng
+  - xform/y(a|o|e|ai|ao|ou|an|in|ing|ang|ong)/i$1/
+  # wu/wa/wo/wai/wei/wan/wen/wang/weng
   - xform/wu/u/
-  - xform/w(a|o|ai|ei|an|ang|eng)/u$1/
+  - xform/w(a|o|ai|ei|an|en|ang|eng)/u$1/
   
   # --- Initials (2-letter first, anchored to syllable start) ---
   - xform/(^| |')zhi?/$1ㄓ/
