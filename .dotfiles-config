@@ -1,10 +1,25 @@
-# Format: repo_path' = 'target_path
-# e.g. path/in/dotfile/repo' = '~/path/to/target
-# Use $HOST for hostname substitution
+# vim: ft=toml
 
+# One table per module. Format:
+# [<module>]
+# scripts   = ["setup-fish.sh"]    # runs setup script in order (optional)
+# platforms = ["darwin"]           # only run on these (platform.system().lower()); omit for all
+# [<module>.links]                 # repo_path -> target_path. Use $HOST in either side of a link for hostname substitution
+# 'path/in/dotfile/repo' = '~/path/to/target'
+
+[shell]
+scripts = ["setup-fish.sh", "setup-tmux.sh"]
+[shell.links]
 'config/fish' = '~/.config/fish'
+'config/nvim' = '~/.config/nvim'
+
+[wm]
+[wm.links]
 'config/hypr' = '~/.config/hypr'
 'config/kitty' = '~/.config/kitty'
 'config/niri' = '~/.config/niri'
-'config/nvim' = '~/.config/nvim'
 'config/zed' = '~/.config/zed'
+
+[rime]
+[rime.links]
+'rime' = '~/.local/share/fcitx5/rime'
